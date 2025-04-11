@@ -1,6 +1,6 @@
 pipeline {
-    agent any 
-    
+    agent any
+
     triggers {
       // Poll the git repo for new changes every minute
       pollSCM '* * * * *'
@@ -16,29 +16,29 @@ pipeline {
         APP_NAME = "elliniyessine/springboot_webapp_sample"
     }
 
-    stages { 
+    stages {
         stage('Git Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/elliniyessine/springboot_webapp_sample.git'
             }
         }
         stage('Build the project & run tests') {
-            steps {  
+            steps {
                 sh 'mvn clean install'
             }
         }
         stage('Build docker image') {
-            steps {  
+            steps {
                 sh 'docker build -t $APP_NAME:$BUILD_NUMBER .'
             }
         }
-        
+
         stage('login to dockerhub') {
             steps {
                 sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
             }
         }
-        
+
          stage('push image') {
             steps {
                 sh 'docker push $APP_NAME:$BUILD_NUMBER'
