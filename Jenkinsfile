@@ -39,9 +39,16 @@ pipeline {
             }
         }
 
-         stage('push image') {
+        stage('push image') {
             steps {
                 sh 'docker push $APP_NAME:$BUILD_NUMBER'
+            }
+        }
+
+	stage('Deploy on Kubernetes') {
+            steps {
+                sh 'kubectl apply -f deployment.yaml'
+                sh 'kubectl apply -f service.yaml'
             }
         }
     }
