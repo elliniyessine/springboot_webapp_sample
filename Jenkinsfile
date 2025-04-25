@@ -19,7 +19,7 @@ pipeline {
     stages {
         stage('Git Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/elliniyessine/springboot_webapp_sample.git'
+                git branch: 'tp2', url: 'https://github.com/elliniyessine/springboot_webapp_sample.git'
             }
         }
         stage('Build the project & run tests') {
