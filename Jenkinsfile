@@ -49,7 +49,12 @@ pipeline {
 	stage('Deploy using Helm') {
             steps {
                 withKubeConfig([credentialsId: 'caf70739-f388-4bbf-884a-836a658f9e5e']) {
-		sh 'helm upgrade --install mon-app $HELM_CHART_PATH'
+		//sh 'helm upgrade --install mon-app $HELM_CHART_PATH'
+		sh 'ls'
+		sh 'stat springboot_webapp_sample'
+		sh 'cd springboot_webapp_sample'
+		sh 'ls springboot_webapp_sample/'
+		sh 'helm upgrade --install mon-app ./mon-app'
                 //    sh 'kubectl apply -f deployment.yaml'
                 //    sh 'kubectl apply -f service.yaml'
                 }
