@@ -14,6 +14,7 @@ pipeline {
     environment {
         DOCKERHUB_CREDENTIALS = credentials('93bb42ec-3f43-4a58-800b-83b1edd6bf8b')
         APP_NAME = "elliniyessine/springboot_webapp_sample"
+	HELM_CHART_PATH = './mon-app'
     }
 
     stages {
@@ -39,17 +40,18 @@ pipeline {
             }
         }
 
-        stage('push image') {
-            steps {
-                sh 'docker push $APP_NAME:$BUILD_NUMBER'
-            }
-        }
+        //stage('push image') {
+            //steps {
+                //sh 'docker push $APP_NAME:$BUILD_NUMBER'
+            //}
+        //}
 
-	stage('Deploy on Kubernetes') {
+	stage('Deploy using Helm') {
             steps {
                 withKubeConfig([credentialsId: 'caf70739-f388-4bbf-884a-836a658f9e5e']) {
-                    sh 'kubectl apply -f deployment.yaml'
-                    sh 'kubectl apply -f service.yaml'
+		sh 'helm upgrade --install mon-app $HELM_CHART_PATH'
+                //    sh 'kubectl apply -f deployment.yaml'
+                //    sh 'kubectl apply -f service.yaml'
                 }
             }
         }
